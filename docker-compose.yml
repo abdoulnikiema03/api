@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/entreprise
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: FullstackODC
+    depends_on:
+      - db
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: entreprise
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: FullstackODC
+    volumes:
+      - db_data:/var/lib/postgresql/db_data
+volumes:
+  db_data:
