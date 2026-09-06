@@ -68,7 +68,7 @@ class EmployeeControllerIntegrationTest {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.mail").value("agathe.integration@mail.com"))
+                .andExpect(jsonPath("$.email").value("agathe.integration@mail.com"))
                 .andExpect(jsonPath("$.password").doesNotExist());
     }
 
@@ -84,7 +84,7 @@ class EmployeeControllerIntegrationTest {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.fieldErrors.mail").exists());
+                .andExpect(jsonPath("$.fieldErrors.email").exists());
     }
 
     @Test
@@ -113,7 +113,7 @@ class EmployeeControllerIntegrationTest {
         mockMvc.perform(get("/employees"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].mail").value("sophie.integration@mail.com"));
+                .andExpect(jsonPath("$[0].email").value("sophie.integration@mail.com"));
     }
 
     @Test
@@ -134,7 +134,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = "ADMIN")
     void updateEmployee_shouldReturn200_whenExists() throws Exception {
         EmployeeUpdateDTO dto = new EmployeeUpdateDTO();
         dto.setFirstName("SophieModifiee");
@@ -149,7 +149,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = "ADMIN")
     void updateEmployee_shouldReturn404_whenNotExists() throws Exception {
         EmployeeUpdateDTO dto = new EmployeeUpdateDTO();
         dto.setFirstName("X");
@@ -163,7 +163,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = "ADMIN")
     void partialUpdate_shouldReturn200_andOnlyChangeGivenField() throws Exception {
         EmployeePatchDTO dto = new EmployeePatchDTO();
         dto.setFirstName("SophiePatchee");
@@ -177,7 +177,7 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_ADMIN")
+    @WithMockUser(authorities = "ADMIN")
     void deleteEmployeeById_shouldReturn204_whenExists() throws Exception {
         mockMvc.perform(delete("/employee/{id}", existingEmployee.getId()))
                 .andExpect(status().isNoContent());
@@ -187,14 +187,14 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_ADMIN")
+    @WithMockUser(authorities = "ADMIN")
     void deleteEmployeeById_shouldReturn404_whenNotExists() throws Exception {
         mockMvc.perform(delete("/employee/{id}", 999999L))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_ADMIN")
+    @WithMockUser(authorities = "ADMIN")
     void deleteEmployees_shouldReturn204_andEmptyListAfter() throws Exception {
         mockMvc.perform(delete("/employees"))
                 .andExpect(status().isNoContent());

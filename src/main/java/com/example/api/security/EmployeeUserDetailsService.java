@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Permet à Spring Security d'authentifier un Employee via son email + mot de passe (haché).
  * Chaque employé a le rôle ROLE_EMPLOYEE ; à faire évoluer si des rôles distincts
- * (ex: ROLE_ADMIN) sont nécessaires plus tard dans le fil rouge.
+ * (ex: ADMIN) sont nécessaires plus tard dans le fil rouge.
  */
 @Service
 public class EmployeeUserDetailsService implements UserDetailsService {

@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
  * C'est ici que l'on définit les règles globales de sécurité, notamment l'intégration du JWT.
  */
 @Configuration
+@EnableMethodSecurity
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -81,7 +83,7 @@ public class SecurityConfig {
                         .permitAll()
 
                         // H2 console autorisée sans token
-                        .requestMatchers("/h2-console/**").permitAll()
+                        // .requestMatchers("/h2-console/**").permitAll()
 
                         // POUR LE COURS : On autorise cette route pour le test microservice avec Taskboard
                         .requestMatchers(HttpMethod.GET, "/employee/**").permitAll()
@@ -89,7 +91,7 @@ public class SecurityConfig {
                         // Authentification et création de compte (pas de token requis ici, on vient pour s'authentifier)
                         .requestMatchers(HttpMethod.POST, "/employee").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/employees").permitAll()
+                        //.requestMatchers(HttpMethod.GET, "/employees").permitAll()
                         // TOUTES LES AUTRES REQUÊTES nécessitent un token valide
                         .anyRequest().authenticated())
                         
